@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡IMPORTANTE!</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffbfd3;
+            font-family: 'Montserrat', sans-serif; /* Cambiado a Montserrat */
+        }
+        #signatureCanvas {
+            border: 2px solid rgb(138, 52, 96);
+            background-color: white;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #continueButton {
+            display: none;
+        }
+        #overlay {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 520px; 
+            height: 600px; 
+            background-color: white;
+            z-index: 10;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden; 
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            padding-left: 30px; /* Añadir padding a los lados */
+            padding-right: 30px; /* Añadir padding a los lados */
+        }
+        #overlay h1 {
+            text-align: center; 
+            margin-top: 0;
+            font-size: 24px;
+        }
+        #overlay p {
+            font-size: 14px; /* Texto más pequeño */
+            margin: 30px 0; /* Aumenta el margen superior e inferior del párrafo */
+            line-height: 1.6; /* Aumenta el interlineado para mejorar la legibilidad */
+            text-align: justify; 
+        }
+        #signatureImage {
+            display: block; 
+            margin: 20px auto 0; 
+            width: 60%;
+            height: auto;
+        }
+
+        #signatureTitle {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: rgb(17, 17, 17); /* Color del texto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="width: 500px; height: 300px;">
+        <h2 id="signatureTitle">Firma aquí</h2>
+        <canvas id="signatureCanvas" width="500" height="300"></canvas>
+        <br>
+        <button id="doneButton">Hecho</button>
+        <button id="continueButton">Continuar</button>
+        <div id="overlay">
+            <h1>Certificado de Matrimonio</h1>
+            <p>Certificamos que Juan Ignacio Thomas García y Tania Conde Ribas han celebrado su matrimonio conforme a las leyes y regulaciones vigentes. Este certificado sirve como prueba oficial de la unión entre ambos individuos. El matrimonio ha sido registrado oficialmente en el registro civil correspondiente, y se confirma que ambas partes han aceptado y consentido en llevar a cabo esta unión de manera legal y formal. El presente documento es válido como prueba de la relación con todos los derechos y responsabilidades que conlleva el matrimonio. Cualquier modificación o anulación del presente certificado deberá ser gestionada a través de los canales oficiales establecidos para tal efecto.</p>
+            <img id="signatureImage" />
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        const overlay = document.getElementById('overlay');
+        const signatureImage = document.getElementById('signatureImage');
+        let drawing = false;
+
+        // Configurar el color de la firma a azul
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
+
+        // Iniciar dibujo
+        canvas.addEventListener('mousedown', (e) => {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        // Dibujar sobre el canvas
+        canvas.addEventListener('mousemove', (e) => {
+            if (drawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        });
+
+        // Terminar dibujo
+        canvas.addEventListener('mouseup', () => {
+            drawing = false;
+        });
+
+        // Botón "Hecho"
+        document.getElementById('doneButton').addEventListener('click', () => {
+            // Ocultar el botón "Hecho" y mostrar el botón "Continuar"
+            document.getElementById('doneButton').style.display = 'none';
+            document.getElementById('continueButton').style.display = 'inline-block';
+        });
+
+        // Botón "Continuar"
+        document.getElementById('continueButton').addEventListener('click', () => {
+            // Convertir el canvas a una imagen
+            const dataURL = canvas.toDataURL('image/png');
+            // Establecer la imagen como fondo del overlay
+            signatureImage.src = dataURL;
+            // Mostrar el rectángulo blanco centrado por encima del canvas
+            overlay.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
